@@ -5,10 +5,12 @@ import numpy as np
 # Implements the "Shooting Method" for solving the Time-Independent Schrödinger Equation
 
 BETA = 64
-U_STEP = 0.5
-EPSILON = 0.1
+U_STEP = 0.02
+EPSILON = 0.0982
 PHI_0 = 1.0
 RHO_0 = 0
+
+pointlist = []
 
 # Defines a dimensionless square well potential
 def square_well_v(u):
@@ -18,28 +20,23 @@ def square_well_v(u):
         return 0
 
 # A single step in the numerical integration
-def numerical_step(phi_u, rho_u, u):
+def numerical_integration(phi_u, rho_u, u, i):
+    pointlist.append((phi_u, u))
     rho_next = rho_u - U_STEP * BETA * (EPSILON - square_well_v(u)) * phi_u
     phi_next = phi_u + U_STEP * rho_u
-    return u, phi_next
-
-def numerical_integration(iterations):
-    pointlist = [(0, PHI_0)]
-    for i in range(iterations):
-        point = (numerical_step(PHI_0, RHO_0, U_STEP * (i + 1)))
-        pointlist.append(point)
-    return pointlist
+    if i > 0:
+        numerical_integration(phi_next, rho_next, u+U_STEP, i - 1)
 
 def plot_solutions(iterations):
-    x,y = zip(*numerical_integration(iterations))
+    numerical_integration(PHI_0, RHO_0, 0, iterations)
+    y,x = zip(*pointlist)
     plt.scatter(x,y)
     plt.xlabel('u')
     plt.ylabel('phi')
-    # plt.xlim([-100, 100])
-    # plt.ylim([-100, 100])
+    plt.axhline(0, color='black')
+    plt.xlim([0, 2])
+    plt.ylim([-1.5, 2])
     plt.show()
 
 # main
-plot_solutions(100)
-
-
+plot_solutions(500)
