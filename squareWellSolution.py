@@ -80,20 +80,21 @@ plot_solutions(1.0, 0, 0.0988, 50).show()
 # epsilon = 0.0987 up to the fourth digit
 
 # extract x,y values from point and store them in their own lists
-x,y = zip(*numerical_integration(1.0, 0, 0.0987, 50))
 xa,ya = zip(*numerical_integration(1.0, 0, 0.098, 50))
 xb,yb = zip(*numerical_integration(1.0, 0, 0.099, 50))
+x,y = zip(*numerical_integration(1.0, 0, 0.0987, 50))
 
-# storing everything in a figure
-figure = plt.figure()
-ax1 = figure.add_subplot(111)
 
-# creating a scatter plot with x,y lists, adding labels, setting graph limits, etc.
-ax1.scatter(x,y, s = 10, color='purple', label = "ε = 0.0987")
-ax1.scatter(xa,ya, s = 10, color='blue', label = "ε = 0.098")
+# creating the final plot
+final_plot = plt.figure()
+ax1 = final_plot.add_subplot(111)
+
+# creating three scatter plots for epsilon = 0.099, 0.098, and 0.0987
 ax1.scatter(xb,yb, s = 10, color='red', label = "ε = 0.099")
+ax1.scatter(xa,ya, s = 10, color='blue', label = "ε = 0.098")
+ax1.scatter(x,y, s = 10, color='purple', label = "ε = 0.0987")
 
-
+# adding labels, title, and whatnot
 plt.xlabel('u')
 plt.ylabel('φ(u)')
 plt.axhline(0, color='black', linestyle='--')
@@ -101,8 +102,9 @@ plt.ylim(Y_LIM)
 plt.xlim(X_LIM)
 plt.title("Numerical Solution of the Finite Well Schrödinger Equation")
 
-figure.legend(bbox_to_anchor=(0.2, 0.2), loc = "lower left")
-figure.show()
+# adding the legend and showing the figure
+final_plot.legend(bbox_to_anchor=(0.2, 0.2), loc ="lower left")
+final_plot.show()
 
 # saving the figure (uncomment to save)
-# figure.savefig("finite_well_solution.pdf", format = "pdf")
+# final_plot.savefig("finite_well_solution.pdf", format = "pdf")
